@@ -102,6 +102,6 @@ theme: cactus
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
-theme_config:
-  colorscheme: white
+  type: github
+  repository: https://github.com/dtuncle/dtuncle.github.io
+  branch: master 
