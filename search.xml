@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>红日靶场-ATT&amp;CK红队评估实战靶场二</title>
+      <link href="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&amp;CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/"/>
+      <url>/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&amp;CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/</url>
+      
+        <content type="html"><![CDATA[<p>靶场不能锻炼思维，只能用于练练手，基本操作一下避免手生。</p><h1 id="简易网络拓扑"><a href="#简易网络拓扑" class="headerlink" title="简易网络拓扑"></a>简易网络拓扑</h1><p><img src="/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6-16446515727731.png" alt="未命名文件"></p><h1 id="WEB打点"><a href="#WEB打点" class="headerlink" title="WEB打点"></a>WEB打点</h1><p>Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。</p><p>webshell地址：<a href="http://192.168.124.45/:7001/wls-wsat/test.jsp">http://192.168.124.45/:7001/wls-wsat/test.jsp</a></p><p><img src="/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220212160424896.png" alt="image-20220212160424896"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 红日靶场 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 靶场 </tag>
+            
+            <tag> 域渗透 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>文章示例</title>
       <link href="/2022/02/11/hello-world/"/>
       <url>/2022/02/11/hello-world/</url>
