@@ -4,6 +4,137 @@
   
     
     <entry>
+      <title>Kerberos(5)-Kerberos中继初试</title>
+      <link href="/2022/02/25/Kerberos(5)-Kerberos%E4%B8%AD%E7%BB%A7%E5%88%9D%E8%AF%95/"/>
+      <url>/2022/02/25/Kerberos(5)-Kerberos%E4%B8%AD%E7%BB%A7%E5%88%9D%E8%AF%95/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 域渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kerberos </tag>
+            
+            <tag> 中继 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kerberos(4)-非约束&amp;约束&amp;资源约束委派攻击</title>
+      <link href="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&amp;%E7%BA%A6%E6%9D%9F&amp;%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/"/>
+      <url>/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&amp;%E7%BA%A6%E6%9D%9F&amp;%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 域渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kerberos </tag>
+            
+            <tag> 委派 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kerberos(3)-委派工作原理</title>
+      <link href="/2022/02/25/Kerberos(3)-%E5%A7%94%E6%B4%BE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/"/>
+      <url>/2022/02/25/Kerberos(3)-%E5%A7%94%E6%B4%BE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 域渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kerberos </tag>
+            
+            <tag> 委派 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kerberos(2)-Kerberos攻击手法</title>
+      <link href="/2022/02/25/Kerberos(2)-Kerberos%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/"/>
+      <url>/2022/02/25/Kerberos(2)-Kerberos%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 域渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kerberos </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kerberos(1)-Kerberos工作原理</title>
+      <link href="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/"/>
+      <url>/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Kerberos认证"><a href="#Kerberos认证" class="headerlink" title="Kerberos认证"></a>Kerberos认证</h1><h2 id="kerberos简介"><a href="#kerberos简介" class="headerlink" title="kerberos简介"></a>kerberos简介</h2><p>在古希腊神话中Kerberos指的是：有着一只三头犬守护在地狱之门外,禁止任何人类闯入地狱之中。<br>而现实中的Kerberos是一种**网络身份验证协议,旨在通过密钥加密技术为客户端&#x2F;服务器应用程序提供身份验证,**主要用在域环境下的身份验证。Kerberos只提供每个用户的权限信息，需要每个服务来确认用户是否可以访问其资源。</p><h2 id="kerberos具体内容"><a href="#kerberos具体内容" class="headerlink" title="kerberos具体内容"></a>kerberos具体内容</h2><h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><p>Kerberos使用UDP&#x2F;TCP作为传输协议，UDP&#x2F;TCP是以明文方式发送数据。因此Kerberos需要提供加密。</p><h4 id="主要对象"><a href="#主要对象" class="headerlink" title="主要对象"></a>主要对象</h4><p>这几个对象在Kerberos中共同工作来提供认证。</p><ul><li>Client-想要访问服务的用户或客户端</li><li>AP-应用服务器，提供用户所需的服务</li><li>KDC-密钥分发中心，kerberos的主要服务，负责颁发票据，安装在DC域控制器上。由颁发TGT的AS（身份验证服务）支持。</li></ul><h4 id="加密密钥"><a href="#加密密钥" class="headerlink" title="加密密钥"></a>加密密钥</h4><p>Kerberos处理结构有几种，如票据。这些结构中有很多是加密或者签名了的，来防止被第三方篡改。这些密钥密钥如下。</p><ul><li>KDC或krbtgt密钥-由krbtgt账户的NTLM hash衍生</li><li>用户密钥-用户NTLM hash派生</li><li>服务密钥-来自服务所有者的NTLM hash，可以是一个用户或者计算机账户</li><li>会话密钥-由用户和KDC协商确定</li><li>服务会话密钥-在用户和服务之间使用</li></ul><h4 id="票据"><a href="#票据" class="headerlink" title="票据"></a>票据</h4><p>Kerberos 处理的主要结构是 ticket。票据传递给用户，方便用户在Kerberos认证流程中使用。票据分为两种.</p><ul><li>TGS (Ticket Granting Service) 是用户用来对服务进行认证的票据。它是用服务密钥加密的。</li><li>TGT (Ticket Granting Ticket) 是提交给 KDC 以请求 TGS 的票据。它是用 KDC 的密钥加密的。</li></ul><h4 id="PAC"><a href="#PAC" class="headerlink" title="PAC"></a>PAC</h4><p>PAC (Privilege Attribute Certificate) 是一个几乎包含在每个票据中的结构。这个结构包含了用户的权限，并且是用 KDC 的密钥签名的。</p><p>有可能通过与KDC通信来验证PAC，但是并不常见。然而验证PAC也只检查其签名，不检查PAC中的权限是否正确。</p><p>此外，Client可以通过在票据请求的KERB_PAC_REQUEST字段中指定PAC来避免将其放入票据中。（先简单介绍，后续详细探究PAC）</p><h4 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h4><p>Kerberos 使用不同种类的消息。其中最主要是以下几种。</p><ul><li>KRB_AS_REQ: 用来向 KDC 请求 TGT。</li><li>KRB_AS_REP: 用来由 KDC 交付 TGT。</li><li>KRB_TGS_REQ：用于使用 TGT向 KDC 请求 TGS。</li><li>KRB_TGS_REP：用于由KDC交付TGS。</li><li>KRB_AP_REQ：用于使用 TGS 对用户进行服务认证。</li><li>KRB_AP_REP：（可选）由服务用来对用户进行身份验证。</li><li>KRB_ERROR。传达错误情况的信息。</li></ul><p>它不是 Kerberos 的一部分，而是 NRPC 的一部分，AP 也可以选择使用 KERB_VERIFY_PAC_REQUEST 消息来向 KDC 发送 PAC 的签名，并验证它是否正确。</p><h3 id="kerberos认证流程"><a href="#kerberos认证流程" class="headerlink" title="kerberos认证流程"></a>kerberos认证流程</h3><p><img src="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/image-20220225020242688-16457257643591.png" alt="image-20220225020242688"></p><h4 id="KRB-AS-REQ"><a href="#KRB-AS-REQ" class="headerlink" title="KRB_AS_REQ"></a>KRB_AS_REQ</h4><p>首先，用户必须从KDC获取到一个TGT。所以必须发送一个KRB_AS_REQ。</p><p><img src="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/KRB_AS_REQ-16456427564093.png" alt="img"></p><p>KRB_AS_REQ主要是以下字段：</p><ul><li>带有客户端密钥的加密时间戳，以验证用户并防止重放攻击</li><li>已认证用户的用户名</li><li>与krbtgt相关服务的主体名称（SPN）</li><li>用户生成的临时信息</li></ul><blockquote><p>注意：</p><p>通常情况下加密的时间戳只有在用户需要预认证的情况下才需要，除非在用户账户中设置了DONT_REQ_PREAUTH标志。</p></blockquote><h4 id="KRB-AS-REP"><a href="#KRB-AS-REP" class="headerlink" title="KRB_AS_REP"></a>KRB_AS_REP</h4><p>收到请求后，KDC通过解密时间戳来验证用户身份。如果信息是正确的，那么它必须以KRB_AS_REP来回应。</p><p><img src="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/KRB_AS_REP-16456427870795.png" alt="img"></p><p>KRB_AS_REP主要是以下字段：</p><ul><li>用户名</li><li>TGT<ul><li>用户名</li><li>会话密钥</li><li>TGT过期时间</li><li>具有用户权限的PAC，由KDC签名</li></ul></li><li>一些带有用户密钥的加密数据<ul><li>会话密钥</li><li>TGT过期时间</li><li>用户的临时信息，防止重放</li></ul></li></ul><p>一旦完成，用户就已经拥有了TGT，可以用来申请TGS，并在之后获得服务。</p><h4 id="KRB-TGS-REQ"><a href="#KRB-TGS-REQ" class="headerlink" title="KRB_TGS_REQ"></a>KRB_TGS_REQ</h4><p>为了请求TGS，必须向KDC发送KRB_TGS_REQ消息。</p><p><img src="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/KRB_TGS_REQ-1-16456432552937.png" alt="img"></p><p>KRB_TGS_REQ主要是以下字段：</p><ul><li>用会话密钥加密的数据<ul><li>用户名</li><li>时间戳</li></ul></li><li>TGT</li><li>请求服务的主体</li><li>用户生成的临时信息</li></ul><h4 id="KRB-TGS-REP"><a href="#KRB-TGS-REP" class="headerlink" title="KRB_TGS_REP"></a>KRB_TGS_REP</h4><p>在收到 KRB_TGS_REQ 消息后，KDC 返回 KRB_TGS_REP 中的 TGS。</p><p><img src="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/KRB_TGS_REP-16456435608059.png" alt="img"></p><p>KRB_TGS_REP 主要是以下字段：</p><ul><li>用户名</li><li>TGS<ul><li>服务会话密钥</li><li>用户名</li><li>TGS过期时间</li><li>具有用户权限的PAC，由KDC签名</li></ul></li><li>带有会话密钥的加密数据<ul><li>服务会话密钥</li><li>TGS过期时间</li><li>用户临时信息</li></ul></li></ul><h4 id="KRB-AP-REQ"><a href="#KRB-AP-REQ" class="headerlink" title="KRB_AP_REQ"></a>KRB_AP_REQ</h4><p>最后，如果一切顺利，用户已经有了一个有效的TGS来与服务进行交互。为了使用它，用户必须向AP发送一个KRB_AP_REQ消息。</p><p><img src="/2022/02/25/Kerberos(1)-Kerberos%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/KRB_AP_REQ-164564361736012.png" alt="img"></p><p>KRB_AP_REQ主要是以下字段：</p><ul><li>TGS</li><li>服务会话加密数据<ul><li>用户名</li><li>时间戳，避免重放</li></ul></li></ul><p>之后，如果用户的权限是正确的，他就可以访问服务。如果是服务将根据KDC验证PAC（通常不会发生）。而且，如果需要相互认证，它将用KRB_AP_REP消息来回应用户。</p><p>参考连接：</p><p><a href="https://daiker.gitbook.io/windows-protocol/kerberos/1">https://daiker.gitbook.io/windows-protocol/kerberos/1</a></p><p><a href="https://www.tarlogic.com/blog/how-kerberos-works/">https://www.tarlogic.com/blog/how-kerberos-works/</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 域渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kerberos </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>红日靶场-ATT&amp;CK红队评估实战靶场二</title>
       <link href="/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&amp;CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/"/>
       <url>/2022/02/12/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA-ATT&amp;CK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B0%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA%E4%BA%8C/</url>
